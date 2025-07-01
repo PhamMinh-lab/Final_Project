@@ -1,10 +1,10 @@
 streamlit
 pandas
-scikit-learn
-imblearn
+numpy
 matplotlib
 seaborn
-numpy
 wordcloud
-xgboost
 openpyxl
+xgboost
+scikit-learn==1.2.2
+imblearn==0.10.1
