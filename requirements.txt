@@ -4,7 +4,7 @@ numpy
 matplotlib
 seaborn
 scikit-learn
-imblearn
-xgboost
+textblob
+imbalanced-learn
 openpyxl
 wordcloud
