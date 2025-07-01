@@ -3,8 +3,8 @@ pandas
 numpy
 matplotlib
 seaborn
-scikit-learn==1.2.2
-imblearn==0.10.1
+scikit-learn
+imblearn
 xgboost
 openpyxl
 wordcloud
