@@ -36,10 +36,13 @@ if option == "Sentiment Analysis":
     X = data.drop(columns=['sentiment'])
     y = data['sentiment']
 
+    vectorizer = CountVectorizer(max_df=0.95, min_df=2)
+    X_vect = vectorizer.fit_transform(data["text_clean"].astype(str))
+    
     oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
     X_resampled, y_resampled = oversample.fit_resample(X, y)
 
-    vectorizer = CountVectorizer(max_df=0.95, min_df=2)
+    
         # Ensure all documents are strings and drop NaNs
     text_series = X_resampled["text_clean"].dropna().astype(str)
     doc_term_matrix1 = vectorizer.fit_transform(text_series)
