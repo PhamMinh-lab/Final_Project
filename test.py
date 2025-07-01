@@ -12,7 +12,6 @@ from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from xgboost import XGBClassifier
 # Set page configuration
 st.sidebar.title("🔧 Settings")
 option = st.sidebar.selectbox("Choose a category", ["Project Overview", "Sentiment Analysis", "Information CLustering", "Project Process"], key="main_selectbox")
