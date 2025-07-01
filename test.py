@@ -33,6 +33,7 @@ if option == "Sentiment Analysis":
     # Map 'positive' -> 1, 'negative' -> 0
     data['sentiment'] = data['sentiment'].map({'positive': 1, 'negative': 0})
     data = data.dropna(subset=['sentiment', 'text_clean'])
+    data = data[data['text_clean'].astype(str).str.strip() != ""]
 
     # Preprocessing for model
     # Filter rows with valid text_clean before vectorizing
