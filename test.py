@@ -22,47 +22,38 @@ st.sidebar.markdown("1. Pham Nhat Minh \nEmail: mphamm12@gmail.com  \n2. Vo Quoc
 # ----------------- SENTIMENT ANALYSIS -----------------
 if option == "Sentiment Analysis":
     st.title("📊 Sentiment Analysis of Feedback in ITViec for Companies")
-        # Load data
-    @st.cache_data
 
+    # Load data
+    @st.cache_data
     def load_data():
         return pd.read_excel("Processed_Reviews.xlsx")
 
     data = load_data()
+
     # Map 'positive' -> 1, 'negative' -> 0
     data['sentiment'] = data['sentiment'].map({'positive': 1, 'negative': 0})
-    data = data.dropna(subset=['sentiment'])
-        # Preprocessing for model
-    X = data.drop(columns=['sentiment'])
-    y = data['sentiment']
+    data = data.dropna(subset=['sentiment', 'text_clean'])
 
-    X = data.drop(columns=['sentiment'])
-    y = data['sentiment']
-
-    oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
-    X_resampled, y_resampled = oversample.fit_resample(X, y)
-
+    # Preprocessing for model
     vectorizer = CountVectorizer(max_df=0.95, min_df=2)
-        # Ensure all documents are strings and drop NaNs
-    text_series = X_resampled["text_clean"].dropna().astype(str)
-    doc_term_matrix1 = vectorizer.fit_transform(text_series)
+    X_vect = vectorizer.fit_transform(data['text_clean'].astype(str))
+    y = data['sentiment']
 
+    # Oversample
+    oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
+    X_resampled, y_resampled = oversample.fit_resample(X_vect, y)
 
-    # Also filter y_resampled to match X after dropping NaNs
-    y_resampled = y_resampled[text_series.index]
-    X1 = doc_term_matrix1
-    y1 = y_resampled
-
-    X_train1, X_test1, y_train1, y_test1 = train_test_split(X1, y1, random_state=42)
+    # Split train/test
+    X_train1, X_test1, y_train1, y_test1 = train_test_split(X_resampled, y_resampled, random_state=42)
     nvmodel = MultinomialNB()
     nvmodel.fit(X_train1, y_train1)
 
-        # Company selector
+    # Company selector
     companies = data[['id', 'Company Name']].drop_duplicates().reset_index(drop=True)
     selected_company_name = st.selectbox("Select a company", companies['Company Name'])
     selected_company_id = companies[companies['Company Name'] == selected_company_name]['id'].values[0]
 
-        # Filter company data
+    # Filter company data
     company_data = data[data['id'] == selected_company_id].reset_index(drop=True)
 
     def lda_topics(text_data, n_topics=5):
@@ -93,7 +84,7 @@ if option == "Sentiment Analysis":
     else:
         st.info("No negative feedback available.")
 
-        # User input for custom prediction
+    # User input for custom prediction
     st.subheader("✍️ Test Your Own Feedback")
     user_input = st.text_area("Enter your feedback text:")
 
@@ -104,6 +95,7 @@ if option == "Sentiment Analysis":
             st.success("🟢 Predicted as Positive Feedback")
         else:
             st.error("🔴 Predicted as Negative Feedback")
+
 #----------------------Information CLustering----------------------
 elif option == "Information CLustering":
     st.title("📊 Information Clustering for Feedbacks of Companies on ITViec")
