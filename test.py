@@ -35,9 +35,13 @@ if option == "Sentiment Analysis":
     data = data.dropna(subset=['sentiment', 'text_clean'])
 
     # Preprocessing for model
+    # Filter rows with valid text_clean before vectorizing
+    valid_data = data.dropna(subset=['text_clean'])
+    text_clean = valid_data['text_clean'].astype(str)
+    y = valid_data['sentiment'].values  # Make sure y is aligned to X
+    
     vectorizer = CountVectorizer(max_df=0.95, min_df=2)
-    X_vect = vectorizer.fit_transform(data['text_clean'].astype(str))
-    y = data['sentiment']
+    X_vect = vectorizer.fit_transform(text_clean)
 
     # Oversample
     oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
