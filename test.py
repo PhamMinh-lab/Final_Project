@@ -46,7 +46,8 @@ if option == "Sentiment Analysis":
 
     # Oversample
     oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
-    X_resampled, y_resampled = oversample.fit_resample(X_vect, y)
+    X_resampled, y_resampled = oversample.fit_resample(X_vect, y.to_numpy())
+
 
     # Split train/test
     X_train1, X_test1, y_train1, y_test1 = train_test_split(X_resampled, y_resampled, random_state=42)
