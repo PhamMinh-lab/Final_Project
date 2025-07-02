@@ -39,9 +39,9 @@ if option == "Sentiment Analysis":
     # Filter rows with valid text_clean before vectorizing
     valid_data = data.dropna(subset=['text_clean'])
     text_clean = valid_data['text_clean'].astype(str)
-    # y = valid_data['sentiment'].values  # Make sure y is aligned to X
+    y = valid_data['sentiment'].values  # Make sure y is aligned to X
     ######################################
-    y = np.array(valid_data['sentiment'].tolist())
+    # y = np.array(valid_data['sentiment'].tolist())
 
     ###################################
     
@@ -52,16 +52,14 @@ if option == "Sentiment Analysis":
     oversample = RandomOverSampler(sampling_strategy='auto', random_state=42)
 
     ##############################################
-    st.write("X_vect shape:", X_vect.shape)
-    st.write("y length:", len(y))
-    st.write("y type:", type(y))
+
 
     #############################################
-    X_resampled, y_resampled = oversample.fit_resample(X_vect, y.to_numpy())
+    # X_resampled, y_resampled = oversample.fit_resample(X_vect, y.to_numpy())
 
 
     # Split train/test
-    X_train1, X_test1, y_train1, y_test1 = train_test_split(X_resampled, y_resampled, random_state=42)
+    X_train1, X_test1, y_train1, y_test1 = train_test_split(X_vect, y, random_state=42)
     nvmodel = MultinomialNB()
     nvmodel.fit(X_train1, y_train1)
 
